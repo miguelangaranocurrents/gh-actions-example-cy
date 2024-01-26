@@ -60,14 +60,11 @@ jobs:
         uses: cypress-io/github-action@v6
         continue-on-error: true
 
-        command: |
-          echo secrets.CURRENTS_RECORD_KEY_STAGING
-
         with:
           # 🔥 Set to false to prevent restoring cached blocking Cypress binary
           install: false
           command: |
-            npx cypress-cloud --record --parallel --browser chrome --key ${{ secrets.CURRENTS_RECORD_KEY_STAGING }} --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}}
+            npx cypress-cloud --record --parallel --browser chrome --key EL13AeHKPlitFoHj --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}}
 
       - name: Cancel the run if workflow is cancelled
         if: ${{ cancelled() }}
