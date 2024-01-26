@@ -11,6 +11,14 @@ jobs:
       matrix:
         # run 3 copies of the current job in parallel
         containers: [1]
+
+    env:
+      # enable verbose logging
+      DEBUG: \@cypress/github-action
+      CURRENTS_ENFORCE_IS_CURRENTS: 1
+      CURRENTS_PROJECT_ID: 9aOuF6
+      CURRENTS_API_URL: https://cy-staging.currents.dev
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,12 +57,6 @@ jobs:
           npx cypress cache path
 
       - name: Run Cypress on Currents.dev
-        env:
-          # enable verbose logging
-          DEBUG: \@cypress/github-action
-          CURRENTS_ENFORCE_IS_CURRENTS: 1
-          CURRENTS_PROJECT_ID: 9aOuF6
-          CURRENTS_API_URL: https://cy-staging.currents.dev
         uses: cypress-io/github-action@v6
         continue-on-error: true
 
