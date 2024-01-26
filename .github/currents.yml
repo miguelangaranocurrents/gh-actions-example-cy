@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         # run 3 copies of the current job in parallel
-        containers: [1, 2, 3]
+        containers: [1]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
           # 🔥 Set to false to prevent restoring cached blocking Cypress binary
           install: false
           command: |
-            npx cypress-cloud --record --parallel --browser chrome --key ${{ secrets.CURRENTS_RECORD_KEY_STAGING }} --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}}
+            CURRENTS_ENFORCE_IS_CURRENTS=1 CURRENTS_PROJECT_ID=9aOuF6 CURRENTS_API_URL=https://cy-staging.currents.dev npx cypress-cloud --record --parallel --browser chrome --key ${{ secrets.CURRENTS_RECORD_KEY_STAGING }} --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}}
 
       - name: Cancel the run if workflow is cancelled
         if: ${{ cancelled() }}
