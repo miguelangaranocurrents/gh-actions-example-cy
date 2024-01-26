@@ -1,0 +1,44 @@
+name: Cypress Tests
+
+on:
+  push:
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # run 3 copies of the current job in parallel
+        containers: [1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        # populate commit message for merge commits
+        # see https://currents.dev/readme/ci-setup/github-actions
+        # with:
+        #  ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+
+      # Install Currents
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      # Run all Cypress tests
+      - name: Run Cypress on Currents.dev
+        uses: cypress-io/github-action@v4
+        with:
+          command: yarn cypress-cloud run --record --parallel --browser chrome --key YakSabgBLb7D40nZ --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}} --tag ReleaseSmoke --group ReleaseSmokeTests --env grepTags=@smoke,grepFilterSpecs=true --spec "cypress/e2e/clear.spec.js, cypress/e2e/completed.spec.js, cypress/e2e/counter.spec.js, cypress/e2e/edit.spec.js, cypress/e2e/item.spec.js, cypress/e2e/labels.spec.js, cypress/e2e/new.spec.js, cypress/e2e/persistance.spec.js, cypress/e2e/routing.spec.js, cypress/e2e/smoke.spec.js, cypress/e2e/todo.no-items.spec.js"
+
+      - name: Cancel the run if workflow is cancelled
+        if: ${{ cancelled() }}
+        uses: currents-dev/cancel-run-gh-action@v1
+        with:
+          api-token: YakSabgBLb7D40nZ
+          github-run-id: ${{ github.run_id }}
+          github-run-attempt: ${{ github.run_attempt }}
