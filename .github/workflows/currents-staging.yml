@@ -60,11 +60,12 @@ jobs:
         uses: cypress-io/github-action@v6
         continue-on-error: true
 
+        command: |
+          echo secrets.CURRENTS_RECORD_KEY_STAGING
+
         with:
           # 🔥 Set to false to prevent restoring cached blocking Cypress binary
           install: false
-          command: |
-            echo secrets.CURRENTS_RECORD_KEY_STAGING
           command: |
             npx cypress-cloud --record --parallel --browser chrome --key ${{ secrets.CURRENTS_RECORD_KEY_STAGING }} --ci-build-id ${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt}}
 
