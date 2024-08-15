@@ -1,5 +1,3 @@
 import "./commands";
 
-beforeEach(() => {
-  cy.visit("/");
-});
+import "cypress-cloud/support";
